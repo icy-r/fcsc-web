@@ -1,0 +1,254 @@
+---
+import Layout from '@layouts/Layout.astro';
+import { fetchEvents } from '@services/fetch-content';
+
+// Fetch all events
+const upcomingEvents = await fetchEvents({ upcoming: true });
+const pastEvents = await fetchEvents({ past: true });
+
+// Page title and metadata
+const pageTitle = "Events | FCSC";
+
+//update page title
+Astro.props.pageTitle = pageTitle;
+---
+
+<Layout pageTitle={pageTitle}>
+  <main class="events-page">
+    <div class="container">
+      <h1 class="page-title">Events</h1>
+      
+      <!-- Upcoming Events Section -->
+      <section class="events-section">
+        <h2 class="section-title">Upcoming Events</h2>
+        
+        {upcomingEvents.length > 0 ? (
+          <div class="events-grid">
+            {upcomingEvents.map((event: any) => (
+              <div class="event-card">
+                <div class="event-date">
+                  <div class="event-day">{event.day}</div>
+                  <div class="event-month">{event.month}</div>
+                </div>
+                <div class="event-details">
+                  <h3 class="event-title">{event.title}</h3>
+                  <div class="event-meta">{event.location}·{event.time}</div>
+                  <p class="event-description">{event.description}</p>
+                  <div class="event-actions">
+                    <a href={event.link} class="details-btn">View Details</a>
+                    <a href={event.registerLink} class="register-btn">Register</a>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p class="no-events">No upcoming events scheduled. Check back soon!</p>
+        )}
+      </section>
+      
+      <!-- Past Events Section -->
+      <section class="events-section past-events">
+        <h2 class="section-title">Past Events</h2>
+        
+        {pastEvents.length > 0 ? (
+          <div class="events-grid">
+            {pastEvents.map((event: any) => (
+              <div class="event-card past">
+                <div class="event-date">
+                  <div class="event-day">{event.day}</div>
+                  <div class="event-month">{event.month}</div>
+                </div>
+                <div class="event-details">
+                  <h3 class="event-title">{event.title}</h3>
+                  <div class="event-meta">{event.location}·{event.time}</div>
+                  <p class="event-description">{event.description}</p>
+                  <div class="event-actions">
+                    <a href={event.link} class="details-btn">View Details</a>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p class="no-events">No past events to display.</p>
+        )}
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .events-page {
+    padding: var(--space-2xl) 0;
+  }
+  
+  .page-title {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+    font-size: 3rem;
+    color: var(--color-text-primary);
+  }
+  
+  .events-section {
+    margin-bottom: var(--space-3xl);
+  }
+  
+  .section-title {
+    margin-bottom: var(--space-xl);
+    font-size: 2rem;
+    color: var(--color-text-primary);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: var(--space-sm);
+  }
+  
+  .events-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+  
+  .event-card {
+    display: flex;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: var(--color-background-secondary);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  }
+  
+  .event-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .event-card.past {
+    opacity: 0.7;
+  }
+  
+  .event-date {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    padding: var(--space-md);
+    background: linear-gradient(135deg, var(--color-accent-primary) 0%, var(--color-accent-primary-gradient) 100%);
+    color: white;
+    text-align: center;
+  }
+  
+  .past .event-date {
+    background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);
+  }
+  
+  .event-day {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+  
+  .event-month {
+    font-size: 1rem;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  
+  .event-details {
+    flex: 1;
+    padding: var(--space-lg);
+  }
+  
+  .event-title {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-xs);
+    color: var(--color-text-primary);
+  }
+  
+  .event-meta {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-sm);
+    opacity: 0.8;
+  }
+  
+  .event-description {
+    margin-bottom: var(--space-md);
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  
+  .event-actions {
+    display: flex;
+    gap: var(--space-md);
+  }
+  
+  .details-btn, .register-btn {
+    display: inline-block;
+    padding: var(--space-xs) var(--space-md);
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+  }
+  
+  .details-btn {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-primary);
+  }
+  
+  .register-btn {
+    background-color: var(--color-accent-primary);
+    color: white;
+  }
+  
+  .details-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .register-btn:hover {
+    background-color: var(--color-accent-primary-gradient);
+    transform: translateY(-2px);
+  }
+  
+  .no-events {
+    text-align: center;
+    padding: var(--space-xl);
+    color: var(--color-text-secondary);
+    background-color: var(--color-background-secondary);
+    border-radius: 8px;
+  }
+  
+  .past-events {
+    opacity: 0.8;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .event-card {
+      flex-direction: column;
+    }
+    
+    .event-date {
+      width: 100%;
+      flex-direction: row;
+      padding: var(--space-sm);
+    }
+    
+    .event-day {
+      margin-right: var(--space-xs);
+    }
+    
+    .event-actions {
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    
+    .details-btn, .register-btn {
+      text-align: center;
+    }
+    
+    .page-title {
+      font-size: 2.5rem;
+    }
+  }
+</style>

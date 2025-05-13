@@ -1,0 +1,206 @@
+/*
+ * Global CSS for FCSC Astro Website
+ * Based on the requirements document
+ */
+ @import "tailwindcss";
+ 
+:root {
+  /* Base Colors - Dark Theme */
+  --color-background: #050508; /* Rich deep space black with subtle noise texture */
+  --color-background-secondary: #13151F; /* Deep charcoal with blue undertones */
+  
+  /* Text Colors */
+  --color-text-primary: #FFFFFF; /* Crisp white */
+  --color-text-secondary: #E2E2E8; /* Soft silver */
+  
+  /* Accent Colors */
+  --color-accent-primary: #00A3FF; /* Electric blue */
+  --color-accent-primary-gradient: #6E46FF; /* Purple gradient end */
+  --color-accent-secondary-cyan: #00FFF0; /* Neon cyan */
+  --color-accent-secondary-magenta: #FF2EE6; /* Vivid magenta */
+  
+  /* Typography */
+  --font-heading: 'Clash Display', 'Space Grotesk', 'Inter', sans-serif;
+  --font-body: 'SF Pro', 'Outfit', 'Public Sans', system-ui, sans-serif;
+  
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  
+   /* radius in percentage */
+   --radius-sm: 5%;
+   --radius-md: 10%;
+   --radius-lg: 15%;
+   --radius-xl: 20%;
+   --radius-full: 50%;
+  
+  /* Shadows and Effects */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
+  --shadow-glow-blue: 0 0 10px rgba(0, 163, 255, 0.5);
+  --shadow-glow-purple: 0 0 10px rgba(110, 70, 255, 0.5);
+  --shadow-glow-cyan: 0 0 10px rgba(0, 255, 240, 0.5);
+  --shadow-glow-magenta: 0 0 10px rgba(255, 46, 230, 0.5);
+  
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 300ms ease;
+  --transition-slow: 500ms ease;
+}
+
+/* Base Styles */
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: 0;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+h2 {
+  font-size: 2.5rem;
+}
+
+h3 {
+  font-size: 2rem;
+}
+
+h4 {
+  font-size: 1.5rem;
+}
+
+h5 {
+  font-size: 1.25rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+a {
+  color: var(--color-accent-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast), text-shadow var(--transition-fast);
+}
+
+a:hover, a:focus {
+  color: var(--color-accent-secondary-cyan);
+  text-shadow: var(--shadow-glow-cyan);
+}
+
+p {
+  margin-bottom: var(--space-md);
+  color: var(--color-text-secondary);
+}
+
+/* Utility Classes */
+.text-gradient {
+  background: linear-gradient(90deg, var(--color-accent-primary), var(--color-accent-primary-gradient));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+.accent-border {
+  border: 1px solid transparent;
+  border-image: linear-gradient(90deg, var(--color-accent-primary), var(--color-accent-primary-gradient)) 1;
+}
+
+.bg-primary {
+  background-color: var(--color-background);
+}
+
+.bg-secondary {
+  background-color: var(--color-background-secondary);
+}
+
+.glass-card {
+  background: rgba(19, 21, 31, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.neumorphic {
+  background: var(--color-background-secondary);
+  box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.4), 
+              -8px -8px 16px rgba(30, 35, 50, 0.1);
+  border-radius: var(--radius-md);
+}
+
+/* Animation Utilities */
+.hover-glow {
+  transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+}
+
+.hover-glow:hover {
+  box-shadow: var(--shadow-glow-blue);
+  transform: translateY(-2px);
+}
+
+.magenta-glow:hover {
+  box-shadow: var(--shadow-glow-magenta);
+}
+
+.cyan-glow:hover {
+  box-shadow: var(--shadow-glow-cyan);
+}
+
+
+
+/* Responsive Container */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+  
+  h2 {
+    font-size: 2rem;
+  }
+  
+  h3 {
+    font-size: 1.75rem;
+  }
+  
+  .container {
+    padding: 0 var(--space-sm);
+  }
+
+  button {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-sm);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-sm);
+    margin: var(--space-xs);
+  }
+
+}

@@ -1,0 +1,91 @@
+---
+// Import the service to fetch the marquee content
+import { fetchContent } from '@services/fetch-content';
+
+// Fetch the marquee content
+const marqueeContent = await fetchContent('marquee');
+---
+
+<div class="marquee-container">
+  <div class="marquee">
+    <div class="marquee-content" set:html={marqueeContent} />
+  </div>
+</div>
+
+
+<style>
+/* Marquee Styles */
+.marquee-container {
+  width: 100%;
+  overflow: hidden;
+  padding: var(--space-xs) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(19, 21, 31, 0.7);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.marquee {
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+}
+
+.marquee-content {
+  display: inline-block;
+  padding-left: 100%;
+  animation: marquee 25s linear infinite;
+  color: var(--color-text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+.marquee-content p {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+.marquee-content a {
+  color: var(--color-accent-primary);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.marquee-content a:hover {
+  color: var(--color-accent-secondary-cyan);
+  text-shadow: var(--shadow-glow-cyan);
+}
+
+.marquee-separator {
+  color: var(--color-accent-primary);
+  margin: 0 var(--space-sm);
+  opacity: 0.7;
+}
+
+.marquee-item {
+  display: inline-block;
+  padding: 0 var(--space-xs);
+}
+
+.marquee-content strong {
+  color: var(--color-accent-primary);
+  font-weight: 600;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Pause animation on hover */
+.marquee:hover .marquee-content {
+  animation-play-state: paused;
+}
+</style>

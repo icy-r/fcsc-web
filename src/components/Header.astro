@@ -1,0 +1,309 @@
+---
+// Import the necessary modules to get pages
+import { getCollection } from 'astro:content';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Define types for page files
+type PageFileType = 'file' | 'directory';
+
+interface PageFile {
+    name: string;
+    type: PageFileType;
+}
+
+interface NavLink {
+    name: string;
+    href: string;
+}
+
+// Function to recursively get all pages including folder-based pages
+function getPageFiles(): PageFile[] {
+    try {
+        const pagesDir = path.join(process.cwd(), 'src/pages');
+        if (!fs.existsSync(pagesDir)) {
+            return [];
+        }
+        
+        // Get all files and directories in the pages directory
+        const entries = fs.readdirSync(pagesDir, { withFileTypes: true });
+        
+        // Process each entry
+        const pages: PageFile[] = [];
+        
+        entries.forEach(entry => {
+            const entryPath = path.join(pagesDir, entry.name);
+            
+            if (entry.isDirectory()) {
+                // Check if the directory has an index.astro file
+                const indexPath = path.join(entryPath, 'index.astro');
+                if (fs.existsSync(indexPath)) {
+                    // Add this as a page with the directory name
+                    pages.push({
+                        name: entry.name,
+                        type: 'directory'
+                    });
+                }
+            } else if (entry.isFile() && (entry.name.endsWith('.astro') || entry.name.endsWith('.md'))) {
+                // Add regular page files
+                pages.push({
+                    name: entry.name,
+                    type: 'file'
+                });
+            }
+        });
+        
+        return pages;
+    } catch (error) {
+        console.error('Error reading pages directory:', error);
+        return [];
+    }
+}
+
+// Get all page files
+const pageFiles = getPageFiles();
+
+// For images in the public directory, we need to use a different approach
+const logoSrc = '/content/fcsc.png';
+
+// Create navigation links
+const navLinks: NavLink[] = pageFiles.map(file => {
+    let name: string = '';
+    let href: string = '';
+    let displayName: string = '';
+    
+    if (file.type === 'file') {
+        // Remove the .astro extension
+        name = file.name.replace('.astro', '');
+        // Remove .md extension
+        name = name.replace('.md', '');
+        // Convert index to Home
+        displayName = name === 'index' ? 'Home' : name.charAt(0).toUpperCase() + name.slice(1);
+        // Create the href
+        href = name === 'index' ? '/' : `/${name}`;
+    } else if (file.type === 'directory') {
+        // For directories with index.astro, use the directory name
+        name = file.name;
+        displayName = name.charAt(0).toUpperCase() + name.slice(1);
+        href = `/${name}`;
+    }
+    
+    return {
+        name: displayName,
+        href: href
+    };
+}).filter((link): link is NavLink => Boolean(link.name) && Boolean(link.href)); // Filter out any undefined links
+
+// If no pages were found, add a default Home link
+if (navLinks.length === 0) {
+    navLinks.push({ name: 'Home', href: '/' });
+}
+
+// Sort navigation links with Home first, then predefined order, then alphabetical
+navLinks.sort((a, b) => {
+    const order = ['Home', 'Blog', 'Events', 'Resources', 'Notices', 'Merchandise', 'About'];
+    
+    // Special case: Home is always first
+    if (a.name === 'Home') return -1;
+    if (b.name === 'Home') return 1;
+    
+    const indexA = order.indexOf(a.name);
+    const indexB = order.indexOf(b.name);
+    
+    // If both items are in our predefined order, sort by that order
+    if (indexA !== -1 && indexB !== -1) {
+        return indexA - indexB;
+    }
+    
+    // If only one item is in our predefined order, it comes first
+    if (indexA !== -1) return -1;
+    if (indexB !== -1) return 1;
+    
+    // If neither item is in our predefined order, sort alphabetically
+    return a.name.localeCompare(b.name);
+});
+
+---
+
+<header>
+    <nav>
+        <!-- logo div -->
+        <div class="logo">
+            <img class="logo" src="/content/fcsc.png" alt="Logo" />
+        </div>
+        
+        <!-- Mobile menu toggle button -->
+        <button class="mobile-menu-toggle" aria-label="Toggle menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+        
+        <!-- Navigation links -->
+        <ul class="nav-links">
+            {navLinks.map((link) => (
+                <li>
+                    <a href={link.href}>{link.name}</a>
+                </li>
+            ))}
+        </ul>
+    </nav>
+</header>
+
+<script>
+    // Mobile menu toggle functionality
+    document.addEventListener('DOMContentLoaded', () => {
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        
+        if (mobileMenuToggle && navLinks) {
+            mobileMenuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                mobileMenuToggle.classList.toggle('active');
+            });
+        }
+    });
+</script>
+
+<style>
+    .logo {
+        width: 100px;
+        height: 20px;
+        object-fit: contain;
+    }
+    
+    header {
+        background-color: var(--color-background-secondary);
+        padding: 1rem;
+        box-shadow: var(--shadow-md);
+        position: relative;
+        z-index: 100;
+    }
+    
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 var(--space-md);
+    }
+    
+    .nav-links {
+        display: flex;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .nav-links li {
+        margin-right: var(--space-lg);
+    }
+    
+    .nav-links a {
+        color: var(--color-text-primary);
+        text-decoration: none;
+        font-family: var(--font-heading);
+        font-weight: 500;
+        transition: color var(--transition-fast), text-shadow var(--transition-fast);
+        position: relative;
+        display: block;
+        padding: var(--space-xs) 0;
+    }
+    
+    .nav-links a:hover {
+        color: var(--color-accent-primary);
+        text-shadow: var(--shadow-glow-blue);
+        text-decoration: none;
+    }
+    
+    .nav-links a:after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -4px;
+        left: 0;
+        background: linear-gradient(90deg, var(--color-accent-primary), var(--color-accent-primary-gradient));
+        transition: width var(--transition-normal);
+    }
+    
+    .nav-links a:hover:after {
+        width: 100%;
+    }
+    
+    /* Mobile menu toggle button */
+    .mobile-menu-toggle {
+        display: none;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: var(--space-xs);
+        z-index: 200;
+    }
+    
+    .mobile-menu-toggle .bar {
+        display: block;
+        width: 25px;
+        height: 3px;
+        margin: 5px auto;
+        background: var(--color-text-primary);
+        transition: all var(--transition-normal);
+        border-radius: var(--radius-sm);
+    }
+    
+    /* Mobile responsive styles */
+    @media (max-width: 768px) {
+        .mobile-menu-toggle {
+            display: block;
+        }
+        
+        .nav-links {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background: var(--color-background-secondary);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-xl) var(--space-md);
+            transition: right var(--transition-normal);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .nav-links.active {
+            right: 0;
+        }
+        
+        .nav-links li {
+            margin: var(--space-md) 0;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .nav-links a {
+            font-size: 1.2rem;
+            padding: var(--space-sm) 0;
+        }
+        
+        /* Animated hamburger to X */
+        .mobile-menu-toggle.active .bar:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+            background: var(--color-accent-primary);
+        }
+        
+        .mobile-menu-toggle.active .bar:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .mobile-menu-toggle.active .bar:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+            background: var(--color-accent-primary);
+        }
+    }
+
+</style>
+
