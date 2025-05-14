@@ -26,7 +26,7 @@ team:
     - name: "Executive Committee"
       active: false
   members:
-    - name: "Chathurma Wickremasinghe"
+    - name: "Chathurma Jayawickrama"
       position: "President"
       image: "/images/team/chathurma.png"
       category: "Executive Committee"
@@ -38,7 +38,7 @@ team:
       category: "Executive Committee"
       bio: "Software Engineering junior focusing on web development and UI/UX design."
       
-    - name: "Dhanushi Tharindya Piyaratne"
+    - name: "Dhanushi Piyaratne"
       position: "Secretary"
       image: "/images/team/dhanushi.png"
       category: "Executive Committee"
