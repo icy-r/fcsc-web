@@ -6,7 +6,7 @@ import { fetchContent } from '@services/fetch-content';
 const marqueeContent = await fetchContent('marquee');
 ---
 
-<div class="marquee-container">
+<div class="marquee-container glass-card">
   <div class="marquee">
     <div class="marquee-content" set:html={marqueeContent} />
   </div>
@@ -21,9 +21,6 @@ const marqueeContent = await fetchContent('marquee');
   padding: var(--space-xs) 0;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background-color: rgba(19, 21, 31, 0.7);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
 }
 
 .marquee {

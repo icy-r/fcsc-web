@@ -125,185 +125,139 @@ navLinks.sort((a, b) => {
 
 ---
 
-<header>
-    <nav>
+<header class="bg-[#13151F] py-4 shadow-md relative z-50">
+    <nav class="container mx-auto px-4 flex justify-between items-center">
         <!-- logo div -->
-        <div class="logo">
-            <img class="logo" src="/content/fcsc.png" alt="Logo" />
+        <div class="w-[120px] h-[30px]">
+            <img class="w-full h-full object-contain" src="/content/fcsc.png" alt="Logo" />
         </div>
         
-        <!-- Mobile menu toggle button -->
-        <button class="mobile-menu-toggle" aria-label="Toggle menu">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
+        <!-- Mobile menu toggle button -->        
+        <button id="menu-toggle" class="lg:hidden z-[300] p-1 transition-transform duration-300 hover:scale-110" aria-label="Toggle menu">
+            <span class="block w-6 h-[3px] my-[5px] rounded-sm bg-white transition-all duration-300"></span>
+            <span class="block w-6 h-[3px] my-[5px] rounded-sm bg-white transition-all duration-300"></span>
+            <span class="block w-6 h-[3px] my-[5px] rounded-sm bg-white transition-all duration-300"></span>
         </button>
         
         <!-- Navigation links -->
-        <ul class="nav-links">
+        <ul class="hidden lg:flex items-center space-x-6">
             {navLinks.map((link) => (
                 <li>
-                    <a href={link.href}>{link.name}</a>
+                    <a href={link.href} class="text-white font-medium relative py-1 hover:text-[#00A3FF] transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-gradient-to-r after:from-[#00A3FF] after:to-[#6E46FF] after:transition-all after:duration-300 hover:after:w-full">
+                        {link.name}
+                    </a>
                 </li>
             ))}
         </ul>
+        
+        <!-- Mobile menu (hidden by default) -->
+        <div class="mobile-menu fixed top-0 right-[-100%] w-4/5 max-w-[300px] h-screen bg-[#050508] z-[200] flex flex-col items-center justify-center p-8 transition-all duration-300 shadow-xl border-l-4 border-[#00A3FF]">
+            <!-- Close button -->
+            <button id="close-menu" class="absolute top-4 right-4 text-white hover:text-[#00A3FF] transition-colors duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            
+            <!-- Logo at top -->
+            <div class="mb-8">
+                <img src="/content/fcsc.png" alt="FCSC Logo" class="w-[120px] h-auto" />
+            </div>
+            
+            <ul class="w-full">
+                {navLinks.map((link) => (
+                    <li class="mb-5">
+                        <a href={link.href} class="text-white text-xl font-medium inline-block w-full py-3 px-4 hover:bg-[#00A3FF]/20 hover:text-[#00A3FF] rounded-lg transition-all duration-300 text-center">
+                            {link.name}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+            
+            <!-- Social links at bottom -->
+            <div class="mt-8 flex gap-4">
+                <a href="#" class="w-10 h-10 rounded-full bg-[#00A3FF]/20 flex items-center justify-center text-white hover:bg-[#00A3FF] transition-colors duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full bg-[#00A3FF]/20 flex items-center justify-center text-white hover:bg-[#00A3FF] transition-colors duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full bg-[#00A3FF]/20 flex items-center justify-center text-white hover:bg-[#00A3FF] transition-colors duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                </a>
+            </div>
+        </div>
     </nav>
 </header>
 
 <script>
     // Mobile menu toggle functionality
     document.addEventListener('DOMContentLoaded', () => {
-        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-        const navLinks = document.querySelector('.nav-links');
+        const mobileMenuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const closeMenuButton = document.getElementById('close-menu');
         
-        if (mobileMenuToggle && navLinks) {
+        // Function to open the menu
+        function openMenu() {
+            if (mobileMenu) {
+                mobileMenu.classList.remove('right-[-100%]');
+                mobileMenu.classList.add('right-0');
+                
+                // Hide the menu toggle button when menu is open
+                if (mobileMenuToggle) {
+                    mobileMenuToggle.classList.add('hidden');
+                }
+            }
+        }
+        
+        // Function to close the menu
+        function closeMenu() {
+            if (mobileMenu) {
+                mobileMenu.classList.add('right-[-100%]');
+                mobileMenu.classList.remove('right-0');
+                
+                // Show the menu toggle button when menu is closed
+                if (mobileMenuToggle) {
+                    mobileMenuToggle.classList.remove('hidden');
+                }
+            }
+        }
+        
+        // Add event listener to the hamburger menu button
+        if (mobileMenuToggle) {
             mobileMenuToggle.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-                mobileMenuToggle.classList.toggle('active');
+                openMenu();
             });
         }
+        
+        // Add event listener to the close button
+        if (closeMenuButton) {
+            closeMenuButton.addEventListener('click', () => {
+                closeMenu();
+            });
+        }
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (event) => {
+            const target = event.target as Node;
+            
+            if (mobileMenu && mobileMenuToggle) {
+                // Only if menu is open and click is outside menu and toggle button
+                if (!mobileMenu.contains(target) && 
+                    !mobileMenuToggle.contains(target) && 
+                    mobileMenu.classList.contains('right-0')) {
+                    
+                    closeMenu();
+                }
+            }
+        });
+        
+        // Debug code to check if elements are found
+        console.log('Menu toggle found:', !!mobileMenuToggle);
+        console.log('Mobile menu found:', !!mobileMenu);
+        console.log('Close button found:', !!closeMenuButton);
     });
 </script>
 
-<style>
-    .logo {
-        width: 100px;
-        height: 20px;
-        object-fit: contain;
-    }
-    
-    header {
-        background-color: var(--color-background-secondary);
-        padding: 1rem;
-        box-shadow: var(--shadow-md);
-        position: relative;
-        z-index: 100;
-    }
-    
-    nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        max-width: 1280px;
-        margin: 0 auto;
-        padding: 0 var(--space-md);
-    }
-    
-    .nav-links {
-        display: flex;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-    
-    .nav-links li {
-        margin-right: var(--space-lg);
-    }
-    
-    .nav-links a {
-        color: var(--color-text-primary);
-        text-decoration: none;
-        font-family: var(--font-heading);
-        font-weight: 500;
-        transition: color var(--transition-fast), text-shadow var(--transition-fast);
-        position: relative;
-        display: block;
-        padding: var(--space-xs) 0;
-    }
-    
-    .nav-links a:hover {
-        color: var(--color-accent-primary);
-        text-shadow: var(--shadow-glow-blue);
-        text-decoration: none;
-    }
-    
-    .nav-links a:after {
-        content: '';
-        position: absolute;
-        width: 0;
-        height: 2px;
-        bottom: -4px;
-        left: 0;
-        background: linear-gradient(90deg, var(--color-accent-primary), var(--color-accent-primary-gradient));
-        transition: width var(--transition-normal);
-    }
-    
-    .nav-links a:hover:after {
-        width: 100%;
-    }
-    
-    /* Mobile menu toggle button */
-    .mobile-menu-toggle {
-        display: none;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        padding: var(--space-xs);
-        z-index: 200;
-    }
-    
-    .mobile-menu-toggle .bar {
-        display: block;
-        width: 25px;
-        height: 3px;
-        margin: 5px auto;
-        background: var(--color-text-primary);
-        transition: all var(--transition-normal);
-        border-radius: var(--radius-sm);
-    }
-    
-    /* Mobile responsive styles */
-    @media (max-width: 768px) {
-        .mobile-menu-toggle {
-            display: block;
-        }
-        
-        .nav-links {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 80%;
-            max-width: 300px;
-            height: 100vh;
-            background: var(--color-background-secondary);
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: var(--space-xl) var(--space-md);
-            transition: right var(--transition-normal);
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .nav-links.active {
-            right: 0;
-        }
-        
-        .nav-links li {
-            margin: var(--space-md) 0;
-            text-align: center;
-            width: 100%;
-        }
-        
-        .nav-links a {
-            font-size: 1.2rem;
-            padding: var(--space-sm) 0;
-        }
-        
-        /* Animated hamburger to X */
-        .mobile-menu-toggle.active .bar:nth-child(1) {
-            transform: translateY(8px) rotate(45deg);
-            background: var(--color-accent-primary);
-        }
-        
-        .mobile-menu-toggle.active .bar:nth-child(2) {
-            opacity: 0;
-        }
-        
-        .mobile-menu-toggle.active .bar:nth-child(3) {
-            transform: translateY(-8px) rotate(-45deg);
-            background: var(--color-accent-primary);
-        }
-    }
-
-</style>
-
+<!-- Styles are now handled by Tailwind CSS -->

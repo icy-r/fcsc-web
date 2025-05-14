@@ -1,0 +1,47 @@
+---
+// Event card component for consistent styling across the site
+import Button from './Button.astro';
+
+interface Props {
+  event: {
+    day: string;
+    month: string;
+    title: string;
+    location: string;
+    time: string;
+    description: string;
+    link?: string;
+    registerLink?: string;
+  };
+  isPast?: boolean;
+}
+
+const { event, isPast = false } = Astro.props;
+---
+
+<div class={`flex flex-col md:flex-row bg-secondary rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg animate-on-scroll ${isPast ? 'opacity-70' : ''}`}
+     data-animation="fade-in">
+  <div class={`flex flex-row md:flex-col justify-center items-center w-full md:w-20 p-4 ${isPast 
+    ? 'bg-gradient-to-br from-gray-700 to-gray-800' 
+    : 'bg-gradient-to-br from-accent-primary to-accent-primary-gradient'} text-white text-center`}>
+    <div class="text-3xl font-bold leading-none mr-2 md:mr-0">{event.day}</div>
+    <div class="text-sm uppercase font-semibold">{event.month}</div>
+  </div>
+  <div class="flex-1 p-6">
+    <h3 class="text-xl font-semibold mb-1 text-white">{event.title}</h3>
+    <div class="text-sm text-gray-400 mb-3">{event.location} · {event.time}</div>
+    <p class="text-gray-300 text-sm mb-4 leading-relaxed">{event.description}</p>
+    <div class="flex flex-col sm:flex-row gap-4">
+      {event.link && (
+        <Button href={event.link} variant="outline" size="sm">
+          View Details
+        </Button>
+      )}
+      {event.registerLink && !isPast && (
+        <Button href={event.registerLink} variant="primary" size="sm">
+          Register
+        </Button>
+      )}
+    </div>
+  </div>
+</div>

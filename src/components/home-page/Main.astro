@@ -1,16 +1,29 @@
 ---
-// No need for hooks in Astro components
+import Button from '@components/ui/Button.astro';
 ---
 
 <section class="hero-section bg-primary">
-    <div class="container">
-        <div class="hero-content text-center">
-            <h1 class="mb-md ">Faculty of Computing <span class="text-gradient">Student Community</span></h1>
-            <p class="text-secondary mb-xl">Empowering computing students to excel academically, professionally, and socially</p>
-            <div class="button-group">
-                <a href="/join" class="btn-primary hover-glow">Join FCSC</a>
-                <a href="/about" class="btn-secondary cyan-glow">Learn More</a>
+    <!-- Main content - higher z-index to ensure visibility -->
+    <div class="container mx-auto px-4 relative z-50">
+        <div class="hero-content text-center py-20">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                <span class="block mb-2">Faculty of Computing</span> 
+                <span class="text-gradient">Student Community</span>
+            </h1>
+            <p class="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">Empowering computing students to excel academically, professionally, and socially</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button href="/join" variant="primary" size="lg" arrowIcon={true}>Join FCSC</Button>
+                <Button href="/about" variant="secondary" size="lg">Learn More</Button>
             </div>
+        </div>
+    </div>
+    
+    <!-- Background elements with lower z-index -->
+    <div class="absolute inset-0 overflow-hidden z-0 pointer-events-none">
+        <div class="floating-shapes">
+            {Array.from({ length: 15 }).map((_, i) => (
+                <div class={`shape shape-${i % 5 + 1}`} style={`--delay: ${i * 0.7}s; --size: ${Math.random() * 2 + 1}rem; --x: ${Math.random() * 100}%; --y: ${Math.random() * 100}%;`}></div>
+            ))}
         </div>
     </div>
 </section>
@@ -18,11 +31,12 @@
 <style>
     /* Only add minimal styling that's not in global.css */
     .hero-section {
-        min-height: 80vh;
+        min-height: 85vh;
         display: flex;
         align-items: center;
         position: relative;
         overflow: hidden;
+        z-index: 1;
     }
     
     /* Add subtle particle effect background */
@@ -46,12 +60,6 @@
         margin: 0 auto;
     }
     
-    .button-group {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-    }
-    
     h1 {
         font-size: 3.5rem;
         line-height: 1.1;
@@ -61,44 +69,115 @@
         font-size: 1.5rem;
     }
     
+    /* Background animation removed - now in global.css */
+    
+    /* Floating shapes animation */
+    .floating-shapes {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 0;
+    }
+    
+    .shape {
+        position: absolute;
+        width: var(--size);
+        height: var(--size);
+        left: var(--x);
+        top: var(--y);
+        opacity: 0.15;
+        animation: float 15s ease-in-out infinite;
+        animation-delay: var(--delay);
+        z-index: 1;
+    }
+    
+    .shape-1 {
+        background: linear-gradient(45deg, var(--color-accent-primary), var(--color-accent-primary-gradient));
+        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    }
+    
+    .shape-2 {
+        background: linear-gradient(45deg, var(--color-accent-secondary-cyan), var(--color-accent-primary));
+        border-radius: 50% 50% 20% 80% / 25% 80% 20% 75%;
+    }
+    
+    .shape-3 {
+        background: linear-gradient(45deg, var(--color-accent-secondary-magenta), var(--color-accent-primary-gradient));
+        border-radius: 80% 20% 50% 50% / 50% 40% 60% 50%;
+    }
+    
+    .shape-4 {
+        background: linear-gradient(45deg, var(--color-accent-primary-gradient), var(--color-accent-secondary-cyan));
+        border-radius: 40% 60% 60% 40% / 70% 30% 70% 30%;
+    }
+    
+    .shape-5 {
+        background: linear-gradient(45deg, var(--color-accent-secondary-magenta), var(--color-accent-secondary-cyan));
+        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    }
+    
+    /* Animation keyframes */
+    
+    @keyframes float {
+        0% {
+            transform: translateY(0) rotate(0deg) scale(1);
+        }
+        50% {
+            transform: translateY(-40px) rotate(180deg) scale(1.1);
+        }
+        100% {
+            transform: translateY(0) rotate(360deg) scale(1);
+        }
+    }
+    
+    /* Text animations */
+    .animate-fade-in {
+        opacity: 0;
+        animation: fade-in 1s ease forwards;
+        animation-delay: var(--delay, 0s);
+    }
+    
+    .animate-slide-up {
+        transform: translateY(30px);
+        animation: slide-up 1s ease forwards;
+        animation-delay: var(--delay, 0s);
+    }
+    
+    .animate-pulse-subtle {
+        animation: pulse-subtle 2s ease-in-out infinite;
+    }
+    
+    @keyframes fade-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    @keyframes slide-up {
+        from { transform: translateY(30px); }
+        to { transform: translateY(0); }
+    }
+    
+    @keyframes pulse-subtle {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+    
     @media (max-width: 768px) {
-        .button-group {
+        .flex {
             flex-direction: column;
             gap: var(--space-sm);
         }
+        
+        h1 {
+            font-size: 2.5rem;
+        }
+        
+        p {
+            font-size: 1.2rem;
+        }
     }
-
-    .btn-primary {
-        padding: 0.75rem 1.5rem;
-        font-size: 1rem;
-        border-radius: 0.5rem;
-        background-color: var(--color-accent-primary);
-        color: var(--color-text-primary);
-        border: none;
-        transition: all var(--transition-normal);
-    }
-
-    .btn-primary:hover {
-        background-color: var(--color-accent-primary-gradient);
-        box-shadow: var(--shadow-glow-blue);
-    }
-
-    .btn-secondary {
-        padding: 0.75rem 1.5rem;
-        font-size: 1rem;
-        border-radius: 0.5rem;
-        border: 2px solid var(--color-accent-secondary-cyan);
-        color: var(--color-accent-secondary-cyan);
-        background: transparent;
-        transition: all var(--transition-normal);
-    }
-
-    .btn-secondary:hover {
-        background-color: rgba(0, 255, 240, 0.1);
-        box-shadow: var(--shadow-glow-cyan);
-        color: var(--color-text-primary);
-        transform: translateY(-2px);
-        transition: all var(--transition-normal);
-    }
-    
 </style>

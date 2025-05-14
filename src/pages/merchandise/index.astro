@@ -1,5 +1,7 @@
 ---
 import Layout from '@layouts/Layout.astro';
+import Button from '@components/ui/Button.astro';
+import ProductCard from '@components/ui/ProductCard.astro';
 
 //import data from merchandise.md
 import {fetchContent} from '@services/fetch-content';
@@ -37,148 +39,25 @@ Astro.props.pageTitle = pageTitle;
 ---
 
 <Layout pageTitle={pageTitle}>
-    <div class="container">
-        <h1 class="page-title text-gradient">Featured Merchandise</h1>
-        
-        {/* Featured items with large banner */}
-        <div class="featured-merchandise">
-            {featuredItems.map((item: MerchandiseItem) => (
-                <div class="featured-item glass-card hover-glow">
-                    <div class="featured-image">
-                        <img src={item.image} alt={item.name} />
-                    </div>
-                    <div class="featured-content">
-                        <h2>{item.name}</h2>
-                        <p class="description">{item.description}</p>
-                        <p class="price">{item.price}</p>
-                        <a href={item.link} class="buy-btn cyan-glow">Buy Now</a>
-                    </div>
-                </div>
-            ))}
+    <main class="py-24 bg-primary">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl md:text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-accent-primary to-accent-primary-gradient">Featured Merchandise</h1>
+            
+            {/* Featured items with large banner */}
+            <div class="mb-16">
+                {featuredItems.map((item: MerchandiseItem) => (
+                    <ProductCard item={item} featured={true} />
+                ))}
+            </div>
+            
+            <h2 class="text-3xl font-semibold mb-8 pb-2 text-white border-b border-white/10">Other Merchandise</h2>
+            
+            {/* Regular items in grid layout */}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {regularItems.map((item: MerchandiseItem) => (
+                    <ProductCard item={item} />
+                ))}
+            </div>
         </div>
-        
-        <h2 class="section-title">Other Merchandise</h2>
-        
-        {/* Regular items in grid layout */}
-        <div class="merchandise-grid">
-            {regularItems.map((item: MerchandiseItem) => (
-                <div class="merchandise-item glass-card hover-glow">
-                    <img src={item.image} alt={item.name} />
-                    <h3>{item.name}</h3>
-                    <p class="description">{item.description}</p>
-                    <p class="price">{item.price}</p>
-                    <a href={item.link} class="buy-btn magenta-glow">Buy Now</a>
-                </div>
-            ))}
-        </div>
-    </div>
+    </main>
 </Layout>
-
-<style>
-    /* Merchandise page specific styles */
-    .page-title {
-        text-align: center;
-        margin-bottom: var(--space-2xl);
-    }
-    
-    .section-title {
-        margin: var(--space-2xl) 0 var(--space-lg);
-    }
-    
-    /* Featured item styles */
-    .featured-merchandise {
-        margin-bottom: var(--space-2xl);
-    }
-    
-    .featured-item {
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        margin-bottom: var(--space-xl);
-        padding: var(--space-md);
-    }
-    
-    @media (min-width: 768px) {
-        .featured-item {
-            flex-direction: row;
-            align-items: center;
-        }
-    }
-    
-    .featured-image {
-        flex: 1;
-        border-radius: var(--radius-sm);
-        overflow: hidden;
-    }
-    
-    .featured-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-        transition: transform var(--transition-normal);
-    }
-    
-    .featured-item:hover .featured-image img {
-        transform: scale(1.05);
-    }
-    
-    .featured-content {
-        flex: 1;
-        padding: var(--space-lg);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-    
-    /* Regular merchandise grid */
-    .merchandise-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: var(--space-xl);
-    }
-    
-    .merchandise-item {
-        overflow: hidden;
-        transition: transform var(--transition-normal);
-        padding: var(--space-md);
-    }
-    
-    .merchandise-item img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-        border-radius: var(--radius-sm);
-        transition: transform var(--transition-normal);
-    }
-    
-    .merchandise-item:hover img {
-        transform: scale(1.05);
-    }
-    
-    .merchandise-item h3 {
-        margin: var(--space-md) 0 var(--space-sm);
-    }
-    
-    .description {
-        margin-bottom: var(--space-sm);
-    }
-    
-    .price {
-        font-weight: bold;
-        font-size: 1.1rem;
-        margin-bottom: var(--space-md);
-    }
-    
-    .buy-btn {
-        display: inline-block;
-        padding: var(--space-sm) var(--space-lg);
-        background: var(--color-accent-primary);
-        color: var(--color-text-primary);
-        text-decoration: none;
-        border-radius: 4px;
-        font-weight: bold;
-        transition: all var(--transition-normal);
-        text-align: center;
-    }
-</style>

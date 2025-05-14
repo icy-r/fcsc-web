@@ -1,6 +1,8 @@
 ---
 //updates section for home page
 import { fetchContent } from '@services/fetch-content';
+import Badge from '../ui/Badge.astro';
+import Button from '../ui/Button.astro';
 
 // Fetch the updates content as structured data
 const updatesData = await fetchContent('updates', 'data');
@@ -9,155 +11,32 @@ const updatesData = await fetchContent('updates', 'data');
 const updates = updatesData.updates || [];
 ---
 
-<section class="updates-section">
-  <div class="container">
-    <h2 class="section-title">Latest Updates</h2>
+<section class="py-24">
+  <div class="container mx-auto px-4">
+    <h2 class="text-center mb-xl text-primary animate-on-scroll" data-animation="fade-in">Latest Updates</h2>
     
-    <div class="updates-grid">
-      {updates.map((update: any) => (
-        <div class="update-card">
-          <div class="card-header">
-            <span class={`tag ${update.type.toLowerCase()}-tag`}>{update.type}</span>
-            {/* Card image */}
-            <div class="card-image">
-              {update.img && <img src={update.img} alt={update.title} />}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {updates.map((update: any, index: number) => (
+        <div class="bg-secondary rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-lg animate-on-scroll" 
+             data-animation="fade-in" 
+             data-delay={`${index * 0.1}s`}>
+          <div class="relative p-4 border-b border-white/10">
+            <div class="absolute top-4 left-4 z-10">
+              <Badge type={update.type} />
+            </div>
+            <div class="h-30 w-full overflow-hidden mt-4 rounded-lg">
+              {update.img && <img src={update.img} alt={update.title} class="w-full h-full object-cover opacity-70 transition-opacity duration-300 hover:opacity-100" />}
             </div>
           </div>
-          <div class="card-content">
-            <h3 class="card-title">{update.title}</h3>
-            <p class="card-description">{update.description}</p>
-            <a href={update.link} class="read-more">Read More →</a>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2 text-white">{update.title}</h3>
+            <p class="text-gray-300 text-sm mb-4 leading-relaxed">{update.description}</p>
+            <Button href={update.link} variant="outline" size="sm" arrowIcon={true}>
+              Read More
+            </Button>
           </div>
         </div>
       ))}
     </div>
   </div>
 </section>
-
-<style>
-  .updates-section {
-    padding: var(--space-2xl) 0;
-    background-color: var(--color-background);
-  }
-  
-  .section-title {
-    text-align: center;
-    margin-bottom: var(--space-xl);
-    color: var(--color-text-primary);
-    font-size: 2.5rem;
-  }
-  
-  .updates-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--space-lg);
-  }
-  
-  .update-card {
-    border-radius: 12px;
-    overflow: hidden;
-    background-color: var(--color-background-secondary);
-    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
-  }
-  
-  .update-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
-  }
-  
-  .card-header {
-    position: relative;
-    padding: var(--space-sm);
-    background-color: var(--color-background-secondary);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  
-  .card-header .tag {
-    position: absolute;
-    top: var(--space-sm);
-    left: var(--space-sm);
-    z-index: 2;
-  }
-  
-  .card-image {
-    height: 120px;
-    width: 100%;
-    overflow: hidden;
-    margin-top: var(--space-sm);
-    border-radius: 8px;
-    position: relative;
-  }
-  
-  .card-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.7;
-    transition: opacity var(--transition-normal);
-  }
-  
-  .update-card:hover .card-image img {
-    opacity: 1;
-  }
-  
-  .card-content {
-    padding: var(--space-lg);
-  }
-  
-  .tag {
-    display: inline-block;
-    padding: var(--space-xs) var(--space-sm);
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    margin-bottom: var(--space-sm);
-  }
-  
-  .event-tag {
-    background-color: var(--color-accent-primary);
-    color: var(--color-text-primary);
-  }
-  
-  .blog-tag {
-    background-color: var(--color-accent-secondary-magenta);
-    color: var(--color-text-primary);
-  }
-  
-  .card-title {
-    font-size: 1.5rem;
-    margin-bottom: var(--space-sm);
-    color: var(--color-text-primary);
-  }
-  
-  .card-description {
-    margin-bottom: var(--space-md);
-    color: var(--color-text-secondary);
-    font-size: 0.95rem;
-    line-height: 1.6;
-  }
-  
-  .read-more {
-    color: var(--color-accent-secondary-cyan);
-    font-weight: 600;
-    display: inline-block;
-    transition: all var(--transition-fast);
-  }
-  
-  .read-more:hover {
-    color: var(--color-accent-secondary-cyan);
-    text-shadow: var(--shadow-glow-cyan);
-    transform: translateX(3px);
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .updates-grid {
-      grid-template-columns: 1fr;
-    }
-    
-    .section-title {
-      font-size: 2rem;
-    }
-  }
-</style>

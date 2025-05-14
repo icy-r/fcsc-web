@@ -1,0 +1,30 @@
+---
+// Badge component for tags and labels
+interface Props {
+  type: string;
+  className?: string;
+}
+
+const { type, className = "" } = Astro.props;
+
+// Determine badge color based on type
+const getBadgeColor = (type: string) => {
+  const lowerType = type.toLowerCase();
+  
+  if (lowerType === 'event') {
+    return 'bg-accent-primary text-white';
+  } else if (lowerType === 'blog') {
+    return 'bg-accent-magenta text-white';
+  } else if (lowerType === 'notice') {
+    return 'bg-accent-cyan text-white';
+  } else {
+    return 'bg-gray-700 text-white';
+  }
+};
+
+const badgeClasses = `inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase shadow-md ${getBadgeColor(type)} ${className}`;
+---
+
+<span class={badgeClasses}>
+  <slot>{type}</slot>
+</span>

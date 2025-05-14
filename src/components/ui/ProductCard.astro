@@ -1,0 +1,56 @@
+---
+// Product card component for merchandise
+import Button from './Button.astro';
+
+interface Props {
+  item: {
+    name: string;
+    price: string;
+    link: string;
+    image: string;
+    description: string;
+    largeBanner?: string | boolean;
+  };
+  featured?: boolean;
+}
+
+const { item, featured = false } = Astro.props;
+---
+
+{featured ? (
+  <div class="flex flex-col md:flex-row bg-secondary rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-lg mb-12">
+    <div class="flex-1 overflow-hidden rounded-lg m-4">
+      <img 
+        src={item.image} 
+        alt={item.name} 
+        class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+      />
+    </div>
+    <div class="flex-1 p-8 flex flex-col justify-center">
+      <h2 class="text-2xl font-bold mb-3 text-white">{item.name}</h2>
+      <p class="text-gray-300 mb-4">{item.description}</p>
+      <p class="text-xl font-bold text-accent-cyan mb-6">{item.price}</p>
+      <div>
+        <Button href={item.link} variant="accent" size="md">
+          Buy Now
+        </Button>
+      </div>
+    </div>
+  </div>
+) : (
+  <div class="bg-secondary rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-lg p-4">
+    <div class="overflow-hidden rounded-lg mb-4 h-48">
+      <img 
+        src={item.image} 
+        alt={item.name} 
+        class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+      />
+    </div>
+    <h3 class="text-xl font-semibold mb-2 text-white">{item.name}</h3>
+    <p class="text-gray-300 text-sm mb-3">{item.description}</p>
+    <p class="text-lg font-bold text-accent-magenta mb-4">{item.price}</p>
+    <Button href={item.link} variant="primary" size="sm">
+      Buy Now
+    </Button>
+  </div>
+)}

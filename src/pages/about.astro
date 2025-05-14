@@ -1,6 +1,8 @@
 ---
 import Layout from '@layouts/Layout.astro';
 import { getEntryBySlug } from 'astro:content';
+import Button from '@components/ui/Button.astro';
+import AnimatedTeamCard from '@components/ui/AnimatedTeamCard.astro';
 
 // Page title and metadata
 const pageTitle = "About | FCSC";
@@ -14,316 +16,124 @@ let activeCategory = 'All';
 ---
 
 <Layout pageTitle={pageTitle}>
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="container">
-            <h1 class="page-title">{title}</h1>
-            <p class="page-subtitle">{subtitle}</p>
-        </div>
-    </section>
-
-    <!-- Mission & Vision Section -->
-    <section class="mission-section">
-        <div class="container">
-            <div class="content-wrapper">
-                <div class="text-content">
-                    <h2>{mission.title}</h2>
-                    <div class="mission-statement">
-                        <h3>Mission:</h3>
-                        <p>{mission.mission_statement}</p>
-                    </div>
-                    <div class="vision-statement">
-                        <h3>Vision:</h3>
-                        <p>{mission.vision_statement}</p>
-                    </div>
-                </div>
-                <div class="image-content">
-                    <!-- Placeholder for mission image -->
-                    <div class="mission-image-placeholder">
-                        <img src="/content/about-fcsc.png" alt="Mission Image" />
-                    </div>
-                </div>
+    <main class="bg-primary">
+        <!-- Hero Section -->
+        <section class="py-20 bg-gradient-to-b from-[#050508] to-primary">
+            <div class="container mx-auto px-4">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4 text-white">{title}</h1>
+                <p class="text-xl text-gray-300 max-w-3xl">{subtitle}</p>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Core Activities Section -->
-    <section class="activities-section">
-        <div class="container">
-            <h2>{core_activities.title}</h2>
-            <ul class="activities-list">
-                {core_activities.activities.map((activity: any) => (
-                    <li>
-                        <span class="bullet">•</span>
-                        {activity}
-                    </li>
-                ))}
-            </ul>
-        </div>
-    </section>
-
-    <!-- Team Section -->
-    <section class="team-section">
-        <div class="container">
-            <h2>{team.title}</h2>
-            
-            <!-- Team Filter Tabs -->
-            <div class="team-filter">
-                {team.categories.map((category: any) => (
-                    <button 
-                        class={`filter-btn ${category.active ? 'active' : ''}`}
-                        data-category={category.name}
-                    >
-                        {category.name}
-                    </button>
-                ))}
-            </div>
-            
-            <!-- Team Members Grid -->
-            <div class="team-grid">
-                {team.members.map((member: any) => (
-                    <div class="team-card" data-category={member.category}>
-                        <div class="member-image">
-                            <img src={member.image} alt={member.name} />
+        <!-- Mission & Vision Section -->
+        <section class="py-20">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row gap-12">
+                    <div class="flex-1">
+                        <h2 class="text-3xl font-semibold mb-8 text-white">{mission.title}</h2>
+                        <div class="mb-8 bg-secondary p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold mb-2 text-accent-cyan">Mission:</h3>
+                            <p class="text-gray-300">{mission.mission_statement}</p>
                         </div>
-                        <div class="member-info">
-                            <h3 class="member-name">{member.name}</h3>
-                            <p class="member-position">{member.position}</p>
-                            <p class="member-bio">{member.bio}</p>
+                        <div class="bg-secondary p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold mb-2 text-accent-magenta">Vision:</h3>
+                            <p class="text-gray-300">{mission.vision_statement}</p>
                         </div>
                     </div>
-                ))}
+                    <div class="flex-1">
+                        <div class="rounded-lg overflow-hidden shadow-lg max-w-md mx-auto h-80">
+                            <img src="/content/about-fcsc.png" alt="Mission Image" class="w-full h-full object-cover object-center" />
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- Core Activities Section -->
+        <section class="py-20 bg-secondary/30">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-semibold mb-8 text-white">{core_activities.title}</h2>
+                <ul class="space-y-4 max-w-3xl">
+                    {core_activities.activities.map((activity: any) => (
+                        <li class="flex items-start">
+                            <span class="text-accent-cyan text-xl mr-3">•</span>
+                            <span class="text-gray-300">{activity}</span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section class="py-20">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-semibold mb-8 text-white">{team.title}</h2>
+                
+                <!-- Team Filter Tabs -->
+                <div class="flex flex-wrap gap-3 mb-12">
+                    {team.categories.map((category: any) => (
+                        <button 
+                            class={`px-4 py-2 rounded-lg border transition-all duration-300 ${category.active 
+                                ? 'bg-accent-cyan text-primary border-accent-cyan' 
+                                : 'bg-transparent text-white border-white/20 hover:border-accent-cyan hover:text-accent-cyan'}`}
+                            data-category={category.name}
+                        >
+                            {category.name}
+                        </button>
+                    ))}
+                </div>
+                
+                <!-- Team Members Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {team.members.map((member: any) => (
+                        <AnimatedTeamCard member={member} />
+                    ))}
+                </div>
+            </div>
+        </section>
+    </main>
 </Layout>
-
-<style>
-    /* Mission Image Placeholder */
-    .mission-image-placeholder {
-        width: 100%;
-        height: 300px;
-        background-color: #111;
-        border-radius: 8px;
-        overflow: hidden;
-    }
-    
-    .mission-image-placeholder img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
-    /* Hero Section Styles */
-    .hero-section {
-        background-color: #000;
-        color: #fff;
-        padding: 4rem 0 2rem;
-        text-align: left;
-    }
-    
-    .page-title {
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-        font-weight: 700;
-    }
-    
-    .page-subtitle {
-        font-size: 1.2rem;
-        opacity: 0.8;
-    }
-    
-    /* Container Styles */
-    .container {
-        width: 90%;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-    
-    /* Mission Section Styles */
-    .mission-section {
-        padding: 4rem 0;
-        background-color: #000;
-        color: #fff;
-    }
-    
-    .content-wrapper {
-        display: flex;
-        gap: 2rem;
-        align-items: center;
-    }
-    
-    .text-content {
-        flex: 1;
-    }
-    
-    .image-content {
-        flex: 1;
-    }
-    
-    .mission-image-placeholder {
-        width: 100%;
-        height: 300px;
-        background-color: #111;
-        border-radius: 8px;
-    }
-    
-    .mission-statement, .vision-statement {
-        margin-bottom: 1.5rem;
-    }
-    
-    .mission-statement h3, .vision-statement h3 {
-        color: #3498db;
-        margin-bottom: 0.5rem;
-        font-weight: 600;
-    }
-    
-    /* Activities Section Styles */
-    .activities-section {
-        padding: 4rem 0;
-        background-color: #000;
-        color: #fff;
-    }
-    
-    .activities-list {
-        list-style-type: none;
-        padding: 0;
-        margin-top: 2rem;
-    }
-    
-    .activities-list li {
-        margin-bottom: 1rem;
-        display: flex;
-        align-items: flex-start;
-    }
-    
-    .bullet {
-        color: #3498db;
-        margin-right: 0.5rem;
-        font-size: 1.2rem;
-    }
-    
-    /* Team Section Styles */
-    .team-section {
-        padding: 4rem 0;
-        background-color: #000;
-        color: #fff;
-    }
-    
-    .team-filter {
-        display: flex;
-        gap: 1rem;
-        margin: 2rem 0;
-        flex-wrap: wrap;
-    }
-    
-    .filter-btn {
-        background-color: transparent;
-        border: 1px solid #333;
-        color: #fff;
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-    
-    .filter-btn.active {
-        background-color: #3498db;
-        border-color: #3498db;
-    }
-    
-    .team-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 2rem;
-        margin-top: 2rem;
-    }
-    
-    .team-card {
-        background-color: #111;
-        border-radius: 8px;
-        overflow: hidden;
-        transition: transform 0.3s ease;
-    }
-    
-    .team-card:hover {
-        transform: translateY(-5px);
-    }
-    
-    .member-image {
-        height: 200px;
-        overflow: hidden;
-    }
-    
-    .member-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
-    .member-info {
-        padding: 1.5rem;
-    }
-    
-    .member-name {
-        font-size: 1.2rem;
-        margin-bottom: 0.5rem;
-    }
-    
-    .member-position {
-        color: #3498db;
-        font-size: 0.9rem;
-        margin-bottom: 1rem;
-    }
-    
-    .member-bio {
-        font-size: 0.9rem;
-        line-height: 1.5;
-        opacity: 0.8;
-    }
-    
-    /* Responsive Styles */
-    @media (max-width: 768px) {
-        .content-wrapper {
-            flex-direction: column;
-        }
-        
-        .team-grid {
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        }
-    }
-</style>
 
 <script>
     // Team filtering functionality
     document.addEventListener('DOMContentLoaded', () => {
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        const teamCards = document.querySelectorAll<HTMLElement>('.team-card');
+        const filterButtons = document.querySelectorAll('[data-category]');
+        const teamCards = document.querySelectorAll<HTMLElement>('[data-category]');
         
         // Set initial state (show all)
         filterTeam('All');
         
         // Add click event to filter buttons
         filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove active class from all buttons
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                
-                // Add active class to clicked button
-                button.classList.add('active');
-                
-                // Filter team members
-                const category = button.getAttribute('data-category');
-                filterTeam(category);
-            });
+            if (button.tagName === 'BUTTON') { // Only apply to buttons, not cards
+                button.addEventListener('click', () => {
+                    // Update button styles
+                    filterButtons.forEach(btn => {
+                        if (btn.tagName === 'BUTTON') {
+                            btn.classList.remove('bg-accent-cyan', 'text-primary', 'border-accent-cyan');
+                            btn.classList.add('bg-transparent', 'text-white', 'border-white/20');
+                        }
+                    });
+                    
+                    // Add active style to clicked button
+                    button.classList.remove('bg-transparent', 'text-white', 'border-white/20');
+                    button.classList.add('bg-accent-cyan', 'text-primary', 'border-accent-cyan');
+                    
+                    // Filter team members
+                    const category = button.getAttribute('data-category');
+                    filterTeam(category);
+                });
+            }
         });
         
         function filterTeam(category: any) {
             teamCards.forEach(card => {
-                if (category === 'All' || card.getAttribute('data-category') === category) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
+                if (card.tagName !== 'BUTTON') { // Only apply to cards, not buttons
+                    if (category === 'All' || card.getAttribute('data-category') === category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
                 }
             });
         }

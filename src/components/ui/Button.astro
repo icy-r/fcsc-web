@@ -1,0 +1,66 @@
+---
+// Button component with animation effects
+interface Props {
+  href?: string;
+  type?: "button" | "submit" | "reset";
+  variant?: "primary" | "secondary" | "outline" | "accent";
+  size?: "sm" | "md" | "lg";
+  className?: string;
+  arrowIcon?: boolean;
+}
+
+const {
+  href,
+  type = "button",
+  variant = "primary",
+  size = "md",
+  className = "",
+  arrowIcon = false,
+} = Astro.props;
+
+// Variant styles
+const variantClasses = {
+  primary: "bg-accent-primary text-white hover:bg-accent-primary-gradient",
+  secondary: "bg-secondary text-white border border-white/10 hover:border-accent-cyan/50",
+  outline: "bg-transparent border border-white/20 text-white hover:border-accent-cyan hover:text-accent-cyan",
+  accent: "bg-accent-cyan text-primary hover:bg-accent-cyan/90"
+};
+
+// Size styles
+const sizeClasses = {
+  sm: "text-sm py-2 px-4",
+  md: "text-base py-3 px-6",
+  lg: "text-lg py-4 px-8"
+};
+
+const baseClasses = "relative inline-flex items-center justify-center font-medium rounded-lg transition-all duration-300 overflow-hidden group";
+const animationClasses = "before:absolute before:inset-0 before:w-0 before:h-full before:bg-white/10 before:transition-all before:duration-500 hover:before:w-full";
+
+const buttonClasses = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${animationClasses} ${className}`;
+---
+
+{
+  href ? (
+    <a href={href} class={buttonClasses}>
+      <span class="relative z-10 flex items-center">
+        <slot />
+        {arrowIcon && (
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        )}
+      </span>
+    </a>
+  ) : (
+    <button type={type} class={buttonClasses}>
+      <span class="relative z-10 flex items-center">
+        <slot />
+        {arrowIcon && (
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        )}
+      </span>
+    </button>
+  )
+}

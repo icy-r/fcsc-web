@@ -1,0 +1,169 @@
+---
+// Animated team member card component with wave effect
+interface Props {
+  member: {
+    name: string;
+    position: string;
+    bio: string;
+    image: string;
+    category: string;
+  };
+}
+
+const { member } = Astro.props;
+---
+
+<div class="animated-card" data-category={member.category}>
+  <div class="card-background">
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="curve-divider">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <path fill="var(--color-secondary)" d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,202.7C672,203,768,181,864,181.3C960,181,1056,203,1152,208C1248,213,1344,203,1392,197.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+      </svg>
+    </div>
+  </div>
+  
+  <div class="card-inner">
+    <div class="image-container">
+      <img src={member.image} alt={member.name} class="member-image" />
+    </div>
+    
+    <div class="card-content">
+      <h3 class="member-name">{member.name}</h3>
+      <p class="member-position">{member.position}</p>
+      <p class="member-bio">{member.bio}</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .animated-card {
+    position: relative;
+    width: 100%;
+    height: 380px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--color-secondary);
+    box-shadow: 0px 8px 28px -9px rgba(0,0,0,0.45);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .animated-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 15px 35px -12px rgba(0,0,0,0.6);
+  }
+  
+  .card-background {
+    position: absolute;
+    width: 100%;
+    height: 45%;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary-cyan));
+  }
+  
+  .curve-divider {
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    overflow: hidden;
+  }
+  
+  .curve-divider svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  
+  .wave {
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    opacity: 0.4;
+    left: -25%;
+    top: -75%;
+    background: linear-gradient(744deg, var(--color-accent-primary), var(--color-accent-secondary-magenta));
+    border-radius: 40%;
+    animation: wave 55s infinite linear;
+  }
+  
+  .wave:nth-child(2) {
+    animation-duration: 50s;
+  }
+  
+  .wave:nth-child(3) {
+    animation-duration: 45s;
+  }
+  
+  .card-inner {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  @keyframes wave {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .image-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin-top: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid rgba(255, 255, 255, 0.8);
+  }
+  
+  .member-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .card-content {
+    padding: 20px;
+    text-align: center;
+    color: white;
+    margin-top: 15px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .member-name {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+  
+  .member-position {
+    font-size: 0.9rem;
+    color: var(--color-accent-cyan);
+    margin-bottom: 15px;
+    font-weight: 500;
+  }
+  
+  .member-bio {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
